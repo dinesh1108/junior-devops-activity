@@ -76,7 +76,7 @@ jobs:
       - name: Node lint
         working-directory: node
         run: |
-          npm ci
+          npm install
           node -c src/index.js
 
       # ---------- HEALTH CHECK ----------
