@@ -1,0 +1,14 @@
+services:
+  python:
+    build: ./python
+    ports:
+      - "8000:8000"
+
+  node:
+    build: ./node
+    ports:
+      - "3000:3000"
+    environment:
+      - PYTHON_SERVICE_URL=http://python:8000
+    depends_on:
+      - python
