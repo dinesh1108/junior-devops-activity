@@ -158,72 +158,70 @@ Good luck! 🚀
 
   ### DevOps Task Explanation
 
-  Project Setup and Execution
+  **Project Setup and Execution
 
-This project contains two services:
+## This project contains two services:
 
-A Python (FastAPI) service
+1. A Python (FastAPI) service
 
-A Node.js (Express) service that communicates with the Python service
+2. A Node.js (Express) service that communicates with the Python service
 
 Both services are containerized using Docker and can be run together using Docker Compose.
 
-Docker Setup
-Python Service
+- Docker Setup
+- Python Service
 
-A Dockerfile is added inside the python/ directory to containerize the FastAPI application.
+A Dockerfile is added inside the `python/` directory to containerize the FastAPI application.
 
 The service runs on port 8000 and exposes:
 
-/health
+`/health`
+`/sum?a=<number>&b=<number>`
 
-/sum?a=<number>&b=<number>
+**Build and run Python service**
+`docker build -t python-app ./python`
+`docker run -p 8000:8000 python-app`
 
-Build and run Python service
-docker build -t python-app ./python
-docker run -p 8000:8000 python-app
-
-Verify Python service
-curl http://localhost:8000/health
-curl "http://localhost:8000/sum?a=5&b=3"
+**Verify Python service**
+`curl http://localhost:8000/health`
+`curl "http://localhost:8000/sum?a=5&b=3"`
 
 
-Expected output:
+**Expected output:**
 
 8
 
-Node.js Service
+**Node.js Service**
 
-A Dockerfile is added inside the node/ directory to containerize the Node.js application.
+A `Dockerfile` is added inside the node/ directory to containerize the Node.js application.
 
-The service runs on port 3000 and exposes:
+## The service runs on port 3000 and exposes:
 
-/health
-
-/multiply?a=<number>&b=<number>
+`/health`
+`/multiply?a=<number>&b=<number>`
 
 The Node service internally calls the Python service to calculate the result.
 
-Build and run Node service
-docker build -t node-app ./node
-docker run -p 3000:3000 node-app
+**Build and run Node service**
+`docker build -t node-app ./node`
+`docker run -p 3000:3000 node-app`
 
-Verify Node service
-curl http://localhost:3000/health
+**Verify Node service**
+`curl http://localhost:3000/health`
 
-Running Both Services Using Docker Compose
+## Running Both Services Using Docker Compose
 
-A docker-compose.yml file is added at the project root to run both services together.
+- A docker-compose.yml file is added at the project root to run both services together.
 
-Both services run on the same Docker network
+- Both services run on the same Docker network
 
-The Node service communicates with the Python service using the service name python
+- The Node service communicates with the Python service using the service name python
 
-Environment variables are passed using Docker Compose
+- Environment variables are passed using Docker Compose
 
-Both services are accessible from the host machine
+- Both services are accessible from the host machine
 
-docker-compose.yml
+`docker-compose.yml
 services:
   python:
     build: ./python
@@ -237,32 +235,32 @@ services:
     environment:
       - PYTHON_SERVICE_URL=http://python:8000
     depends_on:
-      - python
+      - python`
 
 Run using Docker Compose
 docker compose up --build
 
-Verifying the Services
-Verify Python service
-curl http://localhost:8000/health
-curl "http://localhost:8000/sum?a=5&b=3"
+## Verifying the Services
+**Verify Python service**
+`curl http://localhost:8000/health`
+`curl "http://localhost:8000/sum?a=5&b=3"`
 
-Verify Node service (integration check)
-curl http://localhost:3000/health
-curl "http://localhost:3000/multiply?a=5&b=3"
+**Verify Node service (integration check)**
+`curl http://localhost:3000/health`
+`curl "http://localhost:3000/multiply?a=5&b=3"`
 
 
-Expected output:
+**Expected output:**
 
 15
 
-CI/CD Pipeline
+## CI/CD Pipeline
 
 A GitHub Actions pipeline is configured in:
 
-.github/workflows/ci-cd.yml
+`.github/workflows/ci-cd.yml`
 
-What the pipeline does
+**What the pipeline does**
 
 Runs linting for Python and Node.js
 
@@ -274,15 +272,15 @@ Pushes Docker images to Docker Hub
 
 Automatically tags images using commit SHA and Git tags
 
-Docker Hub Configuration
+## Docker Hub Configuration
 
-The pipeline uses the following GitHub repository secrets:
+## The pipeline uses the following GitHub repository secrets:
 
-DOCKERHUB_USERNAME
+`DOCKERHUB_USERNAME`
 
-DOCKERHUB_TOKEN
+`DOCKERHUB_TOKEN`
 
-Version Tagging (Optional)
+Version Tagging 
 
 When a Git tag is created:
 
